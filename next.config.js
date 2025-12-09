@@ -6,7 +6,12 @@ const nextConfig = {
     compress: true,
     poweredByHeader: false,
     images: {
-        domains: ['localhost'],
+        remotePatterns: [
+            {
+                protocol: 'http',
+                hostname: 'localhost',
+            },
+        ],
         formats: ['image/avif', 'image/webp'],
         minimumCacheTTL: 60,
     },

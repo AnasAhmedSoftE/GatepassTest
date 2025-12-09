@@ -43,6 +43,10 @@ COPY --from=deps --chown=nextjs:nodejs /app/node_modules ./node_modules
 RUN mkdir .next
 RUN chown nextjs:nodejs .next
 
+# Create upload directories with proper permissions
+RUN mkdir -p ./public/uploads/passports ./public/uploads/documents
+RUN chown -R nextjs:nodejs ./public/uploads
+
 # Automatically leverage output traces to reduce image size
 # https://nextjs.org/docs/advanced-features/output-file-tracing
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
