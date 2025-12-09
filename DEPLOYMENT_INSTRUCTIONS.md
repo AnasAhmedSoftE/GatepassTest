@@ -45,6 +45,6 @@ The new database is completely empty. We need to send the table design (Schema) 
 2.  Wait a moment until a black screen (terminal) appears and is ready for input.
 3.  Copy and paste the following command there, then press Enter:
     ```bash
-    npx prisma migrate deploy
+    npx prisma@6.0.1 migrate deploy
     ```
 4.  If you see a green success message, it means the tables have been successfully created in the new database!
