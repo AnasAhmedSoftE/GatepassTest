@@ -13,7 +13,6 @@ export async function GET(request: NextRequest) {
             const requestType = searchParams.get('requestType') as RequestType | null;
             const dateFrom = searchParams.get('dateFrom');
             const dateTo = searchParams.get('dateTo');
-            const filterBy = searchParams.get('filterBy'); // 'createdAt' or 'dateOfVisit' (default)
             const search = searchParams.get('search');
             const page = parseInt(searchParams.get('page') || '1');
             const limit = parseInt(searchParams.get('limit') || '20');
@@ -31,14 +30,12 @@ export async function GET(request: NextRequest) {
             }
 
             if (dateFrom || dateTo) {
-                // Support filtering by createdAt or dateOfVisit
-                const dateField = filterBy === 'createdAt' ? 'createdAt' : 'dateOfVisit';
-                where[dateField] = {};
+                where.dateOfVisit = {};
                 if (dateFrom) {
-                    where[dateField].gte = new Date(dateFrom);
+                    where.dateOfVisit.gte = new Date(dateFrom);
                 }
                 if (dateTo) {
-                    where[dateField].lte = new Date(dateTo);
+                    where.dateOfVisit.lte = new Date(dateTo);
                 }
             }
 

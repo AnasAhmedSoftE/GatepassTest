@@ -4,18 +4,22 @@ import React from 'react';
 import Link from 'next/link';
 import { Logo } from '../ui';
 import { NavItem } from './Navigation';
+import { User } from '@/hooks/useAuth';
 
 interface SidebarProps {
     items: NavItem[];
     locale: 'en' | 'ar';
     isRTL: boolean;
+    user: User | null;
+    onLogout: () => void;
+    onToggleLocale: () => void;
 }
 
-export const Sidebar: React.FC<SidebarProps> = ({ items, locale, isRTL }) => {
+export const Sidebar: React.FC<SidebarProps> = ({ items, locale, isRTL, user, onLogout, onToggleLocale }) => {
     return (
-        <aside className="w-64 bg-white border-r border-purple-200 h-full overflow-y-auto lg:fixed lg:left-0 lg:top-0 lg:bottom-0" dir={isRTL ? 'rtl' : 'ltr'}>
+        <aside className="w-64 bg-white border-r border-purple-200 h-full flex flex-col lg:fixed lg:left-0 lg:top-0 lg:bottom-0" dir={isRTL ? 'rtl' : 'ltr'}>
             {/* Logo Section */}
-            <div className="p-6 border-b border-gray-200">
+            <div className="p-6 border-b border-gray-200 flex-shrink-0">
                 <Link href="/admin/dashboard" className="flex flex-col items-center">
                     <Logo size="lg" showText={false} />
                     <div className="mt-3 text-center">
@@ -26,11 +30,57 @@ export const Sidebar: React.FC<SidebarProps> = ({ items, locale, isRTL }) => {
             </div>
 
             {/* Navigation Items */}
-            <nav className="p-4 space-y-1" role="navigation" aria-label="Main navigation">
+            <nav className="p-4 space-y-1 flex-1 overflow-y-auto" role="navigation" aria-label="Main navigation">
                 {items.map((item) => (
                     <NavLink key={item.href} item={item} />
                 ))}
             </nav>
+
+            {/* Footer Section - User Info, Language Toggle, and Logout */}
+            <div className="border-t border-gray-200 p-4 flex-shrink-0 bg-gray-50">
+                {/* User Info */}
+                {user && (
+                    <div className="mb-4 pb-4 border-b border-gray-200">
+                        <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary-500 to-primary-700 flex items-center justify-center flex-shrink-0">
+                                <span className="text-white font-semibold text-sm">
+                                    {user.name.charAt(0).toUpperCase()}
+                                </span>
+                            </div>
+                            <div className="flex-1 min-w-0">
+                                <p className="text-sm font-semibold text-gray-900 truncate">{user.name}</p>
+                                <p className="text-xs text-gray-500 capitalize truncate">
+                                    {user.role.replace('_', ' ').toLowerCase()}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {/* Language Toggle Button */}
+                <button
+                    onClick={onToggleLocale}
+                    className="w-full mb-3 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 hover:border-primary-300 transition-all duration-200 font-medium text-sm"
+                    aria-label={locale === 'en' ? 'Switch to Arabic' : 'Switch to English'}
+                >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
+                    </svg>
+                    <span>{locale === 'en' ? 'العربية' : 'English'}</span>
+                </button>
+
+                {/* Logout Button */}
+                <button
+                    onClick={onLogout}
+                    className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-danger-500 text-white hover:bg-danger-600 transition-all duration-200 font-medium text-sm shadow-sm hover:shadow-md"
+                    aria-label={locale === 'en' ? 'Logout' : 'تسجيل الخروج'}
+                >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                    </svg>
+                    <span>{locale === 'en' ? 'Logout' : 'تسجيل الخروج'}</span>
+                </button>
+            </div>
         </aside>
     );
 };

@@ -36,7 +36,14 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
     return (
         <div className="min-h-screen bg-gray-50 flex" dir={isRTL ? 'rtl' : 'ltr'}>
             {/* Sidebar */}
-            <Sidebar items={navItems} locale={locale} isRTL={isRTL} />
+            <Sidebar 
+                items={navItems} 
+                locale={locale} 
+                isRTL={isRTL}
+                user={user}
+                onLogout={logout}
+                onToggleLocale={toggleLocale}
+            />
 
             {/* Main Content Area */}
             <div className="flex-1 flex flex-col lg:ml-64">
@@ -61,7 +68,14 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
                 lg:hidden fixed left-0 top-0 bottom-0 z-50 transform transition-transform duration-300
                 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
             `}>
-                <Sidebar items={navItems} locale={locale} isRTL={isRTL} />
+                <Sidebar 
+                    items={navItems} 
+                    locale={locale} 
+                    isRTL={isRTL}
+                    user={user}
+                    onLogout={logout}
+                    onToggleLocale={toggleLocale}
+                />
             </div>
         </div>
     );
