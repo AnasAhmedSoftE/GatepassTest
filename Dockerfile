@@ -21,6 +21,10 @@ COPY . .
 # Disable telemetry during the build.
 ENV NEXT_TELEMETRY_DISABLED 1
 
+# Set a dummy DATABASE_URL for build time (Prisma needs this to generate the client)
+# The real DATABASE_URL will be provided at runtime
+ENV DATABASE_URL="mysql://dummy:dummy@localhost:3306/dummy"
+
 RUN npx prisma generate
 RUN npm run build
 
